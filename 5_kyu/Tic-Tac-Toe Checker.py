@@ -20,24 +20,21 @@ We want our function to return:
 
 
 def is_solved(board):
-    line = lambda x: len(set(x)) == 1 and 0 not in x
+    win = lambda x: len(set(x)) == 1 and 0 not in x
     zero = False
-    diagonals = [[], []]
+    lines = [[], []] + board
     for i in range(3):
-        col = [[]]
+        col = []
         for j in range(3):
-            col[0].append(board[j][i])
+            col.append(board[j][i])
             if board[i][j] == 0:
                 zero = True
             if i == j:
-                diagonals[0].append(board[i][j])
+                lines[0].append(board[i][j])
             if i == 2 - j:
-                diagonals[1].append(board[i][j])
-        if line(board[i]):
-            return (1, 2)[2 in board[i]]
-        if line(col[0]):
-            return (1, 2)[2 in col]
-    for i in range(2):
-        if line(diagonals[i]):
-            return board[1][1]
+                lines[1].append(board[i][j])
+        lines.append(col)
+    for i in lines:
+        if win(i):
+            return i[0]
     return (0, -1)[zero]
